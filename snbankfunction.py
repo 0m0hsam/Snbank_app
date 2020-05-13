@@ -1,0 +1,152 @@
+from __future__ import print_function
+import os, os.path
+import re
+from datetime import datetime
+import random
+import sys
+def bank_login(user,new_staff,user_end,username,acct_number,newfile_staff):
+    new_staff=" "
+    staff_data=" "
+    password=" "
+    not_loggedin=" "
+    new_staff=" "
+    path = '.'
+    name=" "
+    username=" "
+    files=" "
+    user_end=" "
+    acct_number=" "
+    login_error="password not correct"
+
+    if user == "staff" or new_staff == "yes":
+            print("Snbank Staff Login")
+            username=input("Enter Username:")
+            Password_login=input("Enter password:")
+            #username=re.sub
+            save_path='staff/.'
+            newfile_staff= os.path.join(save_path,username+".txt") 
+            if os.path.exists(newfile_staff): 
+                #read staff database
+                f=open(newfile_staff,"r")
+                data=f.readlines()
+                for data_check in data :
+                    staff_data=re.sub(" ","",data_check)
+                    username_ok = re.findall(username, staff_data)
+                    password_ok= re.findall(Password_login, staff_data)		
+                    if not password_ok:
+                        not_loggedin=True
+                    else :
+                        not_loggedin=False
+                        f.close
+            else:
+                print(f"Login failed {username} don't exist ")
+                exit()
+            if not_loggedin == False or user_end == "0" :
+                print(f"Welcome {username} you have successfully logged in\n")
+
+                services(user,new_staff,user_end,username,acct_number,newfile_staff)
+            else:
+                print(f"{login_error}\nLogin failed try again")
+    else:
+        print("Oops wrong entre! try again")
+        bank_login(user,new_staff,user_end,username,acct_number,newfile_staff)
+        services(user,new_staff,user_end,username,acct_number,newfile_staff)
+
+
+def services(user,new_staff,user_end,username,acct_number,newfile_staff):
+        new_staff=" "
+        staff_data=" "
+        password=" "
+        not_loggedin=" "
+        new_staff=" "
+        path = '.'
+        name=" "
+        username=" "
+        files=" "
+        user_end=" "
+        acct_number=" "
+
+        dateTimeObj = datetime.now()
+        print(f"Login Time : {dateTimeObj}")
+        print("Which of our service would you like to use\n")
+        print("\nEnter 1 to Open a bank account")
+        print("\nEnter 2 to Check Your Bank Account")
+        print("\nEnter 3 to Close Bank App")
+        bank_user=input("\nEnter here: ").lower()
+        if bank_user == "3" :
+            print("Thank you for using Snbank App")
+            exit()
+        bank_user=re.sub(" ","",bank_user)
+        if bank_user == "1":
+            acct_name=input("\nEnter Account Name: ")
+            open_bal=input("Enter Account Opening Balance: ")
+            acct_type=input("Enter Account Type: ")
+            acct_email=input("Enter Email: ")		
+            acct=" "
+            #Search account number
+            path = 'customers/.'
+            files = os.listdir(path)
+            total_acct=len(files)+1
+            random.seed(total_acct)
+            acct=random.random()
+            acct=str(acct)
+            slice_object = slice(-1, -11, -1)
+            new_account=acct[slice_object]
+            save_path='customers/'
+            new_file = os.path.join(save_path, new_account+".txt")         
+            f=open(new_file,"w+")
+            print(f"\n{acct_name} your new account number : {new_account}")
+            
+            f.write(f"Account Number: {new_account} \n")
+            f.write(f"Account Name: {acct_name} \n")
+            f.write(f"Account Email: {acct_email} \n")
+            f.write(f"Opening Balance: {open_bal} \n")
+            f.write(f"Account Type: {acct_type} \n")
+            f.close
+            print(f"\n{acct_name} You have successfully open your bank account")
+            if bank_user == "2":
+                #To check account balance
+                acct_number=re.sub(" ","",input("\nEnter Account Number: "))
+                acct_name=input("\nEnter Account Name: ")
+                #Search account number
+                scan_path = 'customers/.'
+                files = os.listdir(scan_path)
+                path='customers/.'
+                account_ok= os.path.join(path,acct_number+".txt") 
+                if os.path.exists(account_ok):
+                    for name in files:
+                        if (f"{acct_number}.txt") == name :
+                            print(f"{acct_name} your acct details\n")			
+                            #read account details from database
+                            save_path='customers/'
+                            newfile= os.path.join(save_path, name)  
+
+                            f=open(newfile,"r")
+                            data=f.readlines()
+                            for data in data :	
+                                print(data)
+                                f.close
+            else:
+                print(f"{acct_number} account number wrong! don't exist ")	
+                user_end=input(f"""		{username}	
+                    To return to main menu enter 2
+                    To Logout enter 1
+                    To Close SnBank App 0
+                            >""")
+
+                if user_end == "1" :
+                    print(f"{username} Thanks for your service to SnBank\nLogout Time: {dateTimeObj}")
+                    f=open(newfile_staff,"w")
+                    f.write(" ")
+                    f.close	
+                    bank_login(user,new_staff,user_end,username,acct_number,newfile_staff)       
+                elif user_end == "2":
+                    services(user,new_staff,user_end,username,acct_number,newfile_staff)
+
+                elif user_end == "0" :
+                    print(f"{username} Thanks for your service to SnBank\nLog Time: {dateTimeObj}")
+                    exit()
+        else:
+            print("Oops wrong entre! try again")
+            bank_login(user,new_staff,user_end,username,acct_number,newfile_staff)
+            services(user,new_staff,user_end,username,acct_number,newfile_staff)
