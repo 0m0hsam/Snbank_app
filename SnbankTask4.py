@@ -7,7 +7,7 @@ import random
 import sys
 
 print("Welcome to Snbank")
-print("Enter Yes/No to use our bank app")
+
 print("Enter STAFF for Staff Login")
 print("Enter NEW to Create Staff Account")
 print("Enter END to Close App\n")
